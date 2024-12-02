@@ -17,6 +17,25 @@ let test_insert_length =
 
     )
 
+let test_insert_in =
+  Test.make ~name:"test_insert_in"
+    (tup2 small_int (list int))
+    (fun (x, l) ->
+
+      List.mem x (insert l x)
+
+    )
+
+let test_insert_preserve =
+  Test.make ~name:"test_insert_preserve"
+    (tup3 small_int small_int (list int))
+    (fun (x, y, l) ->
+
+      List.mem y l ==>
+      List.mem y (insert l x)
+
+    )
+
 let test_insert_partition =
 Test.make ~name:"test_insert_partition"
     (tup2 small_int (list int))
@@ -43,6 +62,8 @@ let test_insert_sorted =
 QCheck_runner.run_tests ~verbose:true
   [
     test_insert_length;
+    test_insert_in;
+    test_insert_preserve;
     test_insert_partition;
     test_insert_sorted
   ]
