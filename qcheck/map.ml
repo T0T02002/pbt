@@ -8,8 +8,7 @@ let rec map (f : 'a -> 'b) (l : 'a list) : 'b list =
 let rec map_bad (f : 'a -> 'b) (l : 'a list) : 'b list =
   match l with
   | [] -> []
-  | x :: xs -> f (f x) :: map f xs
-
+  | x :: xs -> f (f x) :: map_bad f xs
 
 (*
   1. map id x = x
@@ -18,7 +17,7 @@ let rec map_bad (f : 'a -> 'b) (l : 'a list) : 'b list =
 
 let test_identity_law map_impl =
   Test.make ~name:"test_identity_law"
-  (list int) (fun l ->
+  (list small_int) (fun l ->
 
     map_impl Fun.id l = l
 
@@ -26,7 +25,7 @@ let test_identity_law map_impl =
 
 let test_composition_law map_impl =
   Test.make ~name:"test_composition_law"
-  (tup3 (fun1 Observable.int int) (fun1 Observable.int int) (list int)
+  (tup3 (fun1 Observable.int small_int) (fun1 Observable.int small_int) (list small_int)
   )
   (fun (h,g,l) ->
     let h,g = Fn.apply h, Fn.apply g in

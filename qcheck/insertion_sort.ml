@@ -10,7 +10,7 @@ let sort : int list -> int list = List.fold_left insert []
 
 let test_insert_length =
   Test.make ~name:"test_insert_length"
-    (tup2 small_int (list int))
+    (tup2 int (list int))
     (fun (x, l) ->
 
       List.length (insert l x) = 1 + List.length l
@@ -19,7 +19,7 @@ let test_insert_length =
 
 let test_insert_in =
   Test.make ~name:"test_insert_in"
-    (tup2 small_int (list int))
+    (tup2 int (list int))
     (fun (x, l) ->
 
       List.mem x (insert l x)
@@ -28,7 +28,7 @@ let test_insert_in =
 
 let test_insert_preserve =
   Test.make ~name:"test_insert_preserve"
-    (tup3 small_int small_int (list int))
+    (tup3 small_int small_int (list small_int))
     (fun (x, y, l) ->
 
       List.mem y l ==>
@@ -38,7 +38,7 @@ let test_insert_preserve =
 
 let test_insert_partition =
 Test.make ~name:"test_insert_partition"
-    (tup2 small_int (list int))
+    (tup2 small_int (list small_int))
     (fun (x, l) ->
       let sorted = sort l in
       let lt_x, ge_x = List.partition (fun y -> y < x) sorted in
@@ -49,7 +49,7 @@ Test.make ~name:"test_insert_partition"
 
 let test_insert_sorted =
   Test.make ~name:"test_insert_sorted"
-    (tup2 small_int (list int))
+    (tup2 small_int (list small_int))
     (fun (x, l) ->
 
       insert (sort l) x = sort (x :: l)

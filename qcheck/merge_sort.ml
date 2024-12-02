@@ -30,7 +30,7 @@ let test_merge_swap =
 
 let test_merge_anywhere =
   Test.make ~name:"test_merge_anywhere"
-  (tup3 int int (list int))
+  (tup3 small_nat small_nat (list int))
   (fun (n,m,l) ->
 
     merge (sort (take l n)) (sort (drop l n)) =
@@ -40,7 +40,7 @@ let test_merge_anywhere =
 
 let test_merge_silly =
   Test.make ~name:"test_merge_silly"
-  (tup2 int (list int))
+  (tup2 small_nat (list int))
   (fun (n,l) ->
 
     merge (sort (take l n)) (sort (drop l n)) =
