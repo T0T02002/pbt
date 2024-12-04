@@ -14,8 +14,20 @@
 
 ## References
 
-- [Python Hypothesis library](https://hypothesis.readthedocs.io/en/latest/)
+### Property-based testing
+- George Fink, Matt Bishop: [Property-based testing: a new approach to testing for assurance](https://dl.acm.org/doi/abs/10.1145/263244.263267), 1997
 - D. R. MacIver: [In praise of property-based testing](https://increment.com/testing/in-praise-of-property-based-testing/), 2019
+- J. Hughes: [How to Specify It!: A Guide to Writing Properties of Pure Functions](https://research.chalmers.se/publication/517894/file/517894_Fulltext.pdf), 2020 ([video](https://youtu.be/G0NUOst-53U?si=AY6THBq_DYjDRYu1))
+
+### Hypothesis
+- [Python Hypothesis library](https://hypothesis.readthedocs.io/en/latest/)
 - [Solving the Water Jug Problem from Die Hard 3 with TLA+ and Hypothesis](https://hypothesis.works/articles/how-not-to-die-hard-with-hypothesis/)
 - [Rule Based Stateful Testing](https://hypothesis.works/articles/rule-based-stateful-testing/)
+
+### Qcheck
+- [Qcheck github](https://github.com/c-cube/qcheck)
+- Michael Ryan Clarkson: [Randomized Testing and QCheck](https://youtu.be/62SYeSlSCNM?si=Z1c6FlP8B8bUvgPC)
+  
+### Other languages
+- [QuickCheck: Automatic testing of Haskell programs](https://hackage.haskell.org/package/QuickCheck)
 - [QuickChick: Property-Based Testing in Coq](https://softwarefoundations.cis.upenn.edu/qc-current/index.html)
