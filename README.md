@@ -21,6 +21,8 @@
 
 ### Hypothesis
 - [Python Hypothesis library](https://hypothesis.readthedocs.io/en/latest/)
+  - [Strategies](https://hypothesis.readthedocs.io/en/latest/data.html)
+  - [Stateful testing](https://hypothesis.readthedocs.io/en/latest/stateful.html)
 - [Solving the Water Jug Problem from Die Hard 3 with TLA+ and Hypothesis](https://hypothesis.works/articles/how-not-to-die-hard-with-hypothesis/)
 - [Rule Based Stateful Testing](https://hypothesis.works/articles/rule-based-stateful-testing/)
 
