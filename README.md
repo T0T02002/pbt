@@ -2,7 +2,8 @@
 
 ## Examples in Python/Hypothesis
 
-- Remove least element from a list: [1](hypothesis/remove_smallest1.py), [2](hypothesis/remove_smallest2.py), [3](hypothesis/remove_smallest3.py), [4](hypothesis/remove_smallest4.py), [5](hypothesis/remove_smallest5.py), [6](hypothesis/remove_smallest6.py)
+- [Remove least element from a list](hypothesis/remove_smallest/)
+- [Set class](hypothesis/set.py)
 
 ## Examples in OCaml/qcheck
 
