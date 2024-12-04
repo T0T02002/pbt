@@ -2,8 +2,6 @@ from hypothesis import note, assume, settings
 from hypothesis.strategies import *
 from hypothesis.stateful import rule, invariant, precondition, RuleBasedStateMachine
 
-from datetime import datetime
-
 class Set(RuleBasedStateMachine):
 	def __init__(self):
 		super(Set, self).__init__()

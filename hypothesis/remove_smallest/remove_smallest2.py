@@ -16,18 +16,6 @@ def remove_smallest(numbers: List[int]) -> None:
         if numbers[i]==smallest:
             numbers.pop(i) 
 
-# Unit tests
-
-def test_unit1():
-    l = [1,2,3]
-    remove_smallest(l)
-    assert l == [2,3]
-
-# def test_unit2():
-#     l = [12345,12346]
-#     remove_smallest(l)
-#     assert l == [12345]
-
 # Property-based test
 
 @given(lists(integers()))

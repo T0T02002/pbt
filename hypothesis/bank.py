@@ -2,8 +2,6 @@ from hypothesis import note, assume, settings
 from hypothesis.strategies import *
 from hypothesis.stateful import rule, invariant, precondition, RuleBasedStateMachine
 
-from datetime import datetime
-
 class Bank(RuleBasedStateMachine):
     """
     A simple Bank module to handle deposits and withdrawals.

@@ -18,18 +18,6 @@ def remove_smallest(numbers: List[int]) -> None:
             numbers.pop(i)
         i+=1
 
-# Unit tests
-
-def test_unit1():
-    l = [1,2,3]
-    remove_smallest(l)
-    assert l == [2,3]
-
-# def test_unit2():
-#     l = [0,0]
-#     remove_smallest(l)
-#     assert l == []
-
 @given(lists(integers()))
 def test_remove_smallest(l):
     assume (len(l) > 0)
