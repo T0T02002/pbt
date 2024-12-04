@@ -1,5 +1,11 @@
 # Property-based testing
 
+Property-based testing is a testing approach that focuses on verifying general properties of code, rather than specific examples. 
+
+Instead of writing individual test cases with predefined inputs and expected outputs (as in [unit testing](https://en.wikipedia.org/wiki/Unit_testing)), a property-based test randomly generates input data adhering to given constraints, and checks that your code respects the required properties in all the executions driven by the randomly generated inputs. This approach helps uncover hidden bugs by exposing unexpected behaviors that unit tests might miss. 
+
+We show in this repository some examples of property-based testing in Hypothesis (Python) and QCheck (OCaml).
+
 ## Examples in Python/Hypothesis
 
 - [Remove least element from a list](hypothesis/remove_smallest/)
