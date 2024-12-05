@@ -1,4 +1,4 @@
-# Remove least element from a list
+# Remove the least element from a list
 
 We are assigned with this programming task in Python: write a function that takes as input a non-empty list of integers, and removes from it all the occurrences of its least element. 
 
@@ -16,7 +16,7 @@ def remove_smallest(numbers: List[int]) -> None:
 
 ## Unit tests
 
-To check if our solution is correct, we try some unit tests (in [remove_smallest0.py ](remove_smallest0.py )):
+To check if our solution is correct, we try [some unit tests](remove_smallest0.py):
 ```python
 
 def test_unit1():
@@ -134,11 +134,86 @@ The bug in the function is caused by modifying the list while iterating over it 
 
 ## Fixing the code
 
-A possible workaround is to scan the list from right to left, and use the function `pop` to remove the element at a given index: 
+A possible [workaround](remove_smallest2.py) is to scan the list from right to left, and use the function `pop` to remove the element at a given index: 
 ```python
 def remove_smallest(numbers: List[int]) -> None:
     smallest = min(numbers)
     for i in range(len(numbers) -1, -1, -1):
         if numbers[i]==smallest:
             numbers.pop(i) 
+```
+This time, the property-based tests pass:
+```bash
+pytest remove_smallest2.py 
+============================= test session starts ==============================
+platform linux -- Python 3.10.12, pytest-8.3.2, pluggy-1.5.0
+rootdir: /home/bart/progs/informatica-unica/pbt/hypothesis/remove_smallest
+plugins: hypothesis-6.111.1
+collected 1 item                                                               
+remove_smallest2.py .                                                                                                    [100%]
+
+====================================================== 1 passed in 17.71s ======================================================
+```
+We can also check the function against the previous falsifying example:
+```python
+ipython -i remove_smallest2.py
+
+In [1]: l = [0,0]
+In [2]: remove_smallest(l)
+In [3]: l
+Out[3]: []
+```
+Another possible workaround, scanning the list from left to right, is to use the Python `pop` method within a `while` iterator.
+It is important to increase the index of the loop only when not removing the least element:
+```python
+def remove_smallest(numbers: List[int]) -> None:
+    smallest = min(numbers) 
+    i = 0
+
+    while i<len(numbers):
+        if numbers[i]==smallest:
+            numbers.pop(i)
+        else:
+            i+=1
+```
+Also in this case, the property-based tests pass. 
+```bash
+pytest remove_smallest5.py 
+===================================================== test session starts ======================================================
+platform linux -- Python 3.10.12, pytest-8.3.2, pluggy-1.5.0
+rootdir: /home/bart/progs/informatica-unica/pbt/hypothesis/remove_smallest
+plugins: hypothesis-6.111.1
+collected 1 item                                                                                                              
+
+remove_smallest5.py ...                                                                                                  [100%]
+====================================================== 1 passed in 17.88s ======================================================
+```
+It is important to note that property-based testing does not guarantee corretnesss: it might happen that no errors are reported, but the property does not always hold.
+This is because property-based testing analyzes a large (but finite) set of possible randomly generated executions. 
+If the code contains some strange corner cases, then is might be unlikely that the corner case is explored.
+
+For example, consider the following [variant](remove_smallest6.py) of our while-based workaround, where we refrain from removing the least element if it is equal to a given constant:
+```python
+def remove_smallest(numbers: List[int]) -> None:
+    smallest = min(numbers) 
+    i = 0
+
+    while i<len(numbers):
+        if numbers[i]==smallest and numbers[i]!=12345:
+            numbers.pop(i)
+        else:
+            i+=1
+```
+In this case, `pytest` does not report the error. Here we are testing only 10000 examples, but even with a larger number of tests the bug is likely not to be found: 
+```bash
+pytest remove_smallest6.py 
+===================================================== test session starts ======================================================
+platform linux -- Python 3.10.12, pytest-8.3.2, pluggy-1.5.0
+rootdir: /home/bart/progs/informatica-unica/pbt/hypothesis/remove_smallest
+plugins: hypothesis-6.111.1
+collected 1 item                                                                                                               
+
+remove_smallest6.py .                                                                                                    [100%]
+
+====================================================== 1 passed in 17.82s ======================================================
 ```
