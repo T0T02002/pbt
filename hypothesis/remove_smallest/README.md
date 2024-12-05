@@ -108,3 +108,19 @@ remove_smallest1.py:25: AssertionError
 FAILED remove_smallest1.py::test_remove_smallest - assert (1 == 0 or 0 > 0)
 =============================== 1 failed in 0.28s ================================
 ```
+This lengthy error message reveals the falsifying example: the list `[0,0]`.
+Let's see what happens on this example using the interactive Python shell:
+```python
+ipython -i remove_smallest0.py
+
+In [1]: l = [0,0]
+In [2]: remove_smallest(l)
+In [3]: l
+Out[3]: [0]
+```
+From the output, we see that `remove_smallest` has not removed all the occurrences of the least elemement, but only the first one of them.
+The bug in the function is caused by modifying the list while iterating over it using a `for` loop. Specifically:
+1. When `remove(n)` is called, it removes an element from the list. This causes the list to be re-indexed immediately.
+2. However, the `for` loop iterator does not account for this re-indexing: then, after an element is removed, the loop skips the next element in the list.
+3. Therefore, when the smallest element is encountered and removed, the next element after it is skipped because the loop index moves to the next position, but the list has shifted to the left.
+
