@@ -54,3 +54,24 @@ remove_smallest0.py .....                                                [100%]
 
 ============================== 5 passed in 0.10s ===============================
 ```
+
+At this point, we could be convinced that our function is correct: this would be wrong, because of a subtle bug in the use of the `remove` function. 
+To uncover the bug, we exploit property-based testing with the Hypothesis framework.
+
+In particular, we want to check the following property. 
+Consider the least element in the list *before* the function is called.
+Then, *after* the function is executed, either the list is empty, or its new smallest element is less than the old one.
+This property is encoded in Hypothesis as the function `test_remove_smallest`:
+```python
+from hypothesis import given, assume 
+from hypothesis.strategies import *
+from typing import List
+
+# Property-based test
+@given(lists(integers()))
+def test_remove_smallest(l):
+    assume (len(l) > 0)                     # precondition: before the call, the list is non-empty
+    smallest = min(l)                       # old smallest element in the list 
+    remove_smallest(l)                      # invoking the function
+    assert len(l) == 0 or min(l) > smallest
+```
