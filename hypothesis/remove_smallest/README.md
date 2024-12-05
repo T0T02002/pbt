@@ -68,10 +68,43 @@ from hypothesis.strategies import *
 from typing import List
 
 # Property-based test
-@given(lists(integers()))
+@given(lists(integers()))                    # an arbitrary list of integers
 def test_remove_smallest(l):
-    assume (len(l) > 0)                     # precondition: before the call, the list is non-empty
-    smallest = min(l)                       # old smallest element in the list 
-    remove_smallest(l)                      # invoking the function
-    assert len(l) == 0 or min(l) > smallest
+    assume (len(l) > 0)                      # precondition: before the call, the list is non-empty
+    smallest = min(l)                        # old smallest element in the list 
+    remove_smallest(l)                       # invoking the function...
+    assert len(l) == 0 or min(l) > smallest  # either the list is empty, or
+                                             # the new least element is greater than the old one 
+```
+By running `pytest`, we now obtain an error:
+```bash
+pytest  remove_smallest1.py 
+==================================== FAILURES ====================================
+______________________________ test_remove_smallest ______________________________
+
+    @given(lists(integers()))
+>   def test_remove_smallest(l):
+
+remove_smallest1.py:21: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+l = [0]
+
+    @given(lists(integers()))
+    def test_remove_smallest(l):
+        assume (len(l) > 0)
+        smallest = min(l)
+        remove_smallest(l)
+>       assert len(l) == 0 or min(l) > smallest
+E       assert (1 == 0 or 0 > 0)
+E        +  where 1 = len([0])
+E        +  and   0 = min([0])
+E       Falsifying example: test_remove_smallest(
+E           l=[0, 0],
+E       )
+
+remove_smallest1.py:25: AssertionError
+============================ short test summary info =============================
+FAILED remove_smallest1.py::test_remove_smallest - assert (1 == 0 or 0 > 0)
+=============================== 1 failed in 0.28s ================================
 ```
