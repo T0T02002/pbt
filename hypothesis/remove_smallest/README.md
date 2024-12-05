@@ -1,7 +1,8 @@
 # Remove least element from a list
 
 We are assigned with this programming task in Python: write a function that takes as input a non-empty list of integers, and removes from it all the occurrences of its least element. 
-A tentative solution is the following:
+
+A tentative solution is to iterate all the elements of the list, and remove each occurrence of the least element. To this purpose, we use the Python `remove` method, which removes the first occurrence of a specified element:
 ```python
 from typing import List
 
@@ -12,6 +13,8 @@ def remove_smallest(numbers: List[int]) -> None:
         if n==smallest:
             numbers.remove(n)
 ```
+
+## Unit tests
 
 To check if our solution is correct, we try some unit tests (in [remove_smallest0.py ](remove_smallest0.py )):
 ```python
@@ -54,6 +57,8 @@ remove_smallest0.py .....                                                [100%]
 
 ============================== 5 passed in 0.10s ===============================
 ```
+
+## Property-based tests
 
 At this point, we could be convinced that our function is correct: this would be wrong, because of a subtle bug in the use of the `remove` function. 
 To uncover the bug, we exploit property-based testing with the Hypothesis framework.
@@ -108,6 +113,9 @@ remove_smallest1.py:25: AssertionError
 FAILED remove_smallest1.py::test_remove_smallest - assert (1 == 0 or 0 > 0)
 =============================== 1 failed in 0.28s ================================
 ```
+
+## Reproducing the bug
+
 This lengthy error message reveals the falsifying example: the list `[0,0]`.
 Let's see what happens on this example using the interactive Python shell:
 ```python
@@ -124,3 +132,13 @@ The bug in the function is caused by modifying the list while iterating over it 
 2. However, the `for` loop iterator does not account for this re-indexing: then, after an element is removed, the loop skips the next element in the list.
 3. Therefore, when the smallest element is encountered and removed, the next element after it is skipped because the loop index moves to the next position, but the list has shifted to the left.
 
+## Fixing the code
+
+A possible workaround is to scan the list from right to left, and use the function `pop` to remove the element at a given index: 
+```python
+def remove_smallest(numbers: List[int]) -> None:
+    smallest = min(numbers)
+    for i in range(len(numbers) -1, -1, -1):
+        if numbers[i]==smallest:
+            numbers.pop(i) 
+```
