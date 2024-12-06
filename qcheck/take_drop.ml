@@ -1,19 +1,20 @@
 open QCheck
 
-let rec take l n =
-  match l with
-  | [] -> []
-  | _ when n = 0 -> []
-  | l -> take l (n-1)
+(* ################################################
+   Definitions
+   ################################################ *)
 
-let rec drop l n =
-  match l with
-  | [] -> []
-  | _ when n = 0 -> l
-  | l -> drop l (n-1)
+let take _ _ = []
 
-let drop_bad l n = List.rev (take (List.rev l) (List.length l - n))
+let drop l _ = l
 
+(* ################################################
+   Start of tests
+   ################################################ *)
+
+(**
+  Combining [take l n] and [drop l n] gives the starting list
+*)
 let test_take_drop_append take drop =
   Test.make ~name:"test_take_drop_append"
   (tup2 small_nat (list int)) (fun (n, l) ->
@@ -22,6 +23,9 @@ let test_take_drop_append take drop =
 
   )
 
+(**
+  Taking then dropping the same amount gives nothing
+*)
 let test_take_drop_nil take drop =
   Test.make ~name:"test_take_drop_nil"
   (tup2 small_nat (list int)) (fun (n, l) ->
@@ -30,6 +34,9 @@ let test_take_drop_nil take drop =
 
   )
 
+(**
+  Taking the same amount twice doesn't change the result
+*)
 let test_take_take take =
   Test.make ~name:"test_take_take"
   (tup2 small_nat (list int)) (fun (n, l) ->
@@ -38,23 +45,11 @@ let test_take_take take =
 
   )
 
-;;
-
-QCheck_runner.run_tests ~verbose:true
-  [
-    test_take_drop_append take drop;
-    test_take_drop_nil take drop;
-    test_take_take take;
-  ]
-
-(** [take] completely annihilates the list!
-    Meanwhile [drop] does absolutely nothing.
-    Yet the above invariants hold... let's add more tests:
-*)
-
 let ( -- ) a b = List.init (b - a) (fun x -> a + x)
 
-(* Take preserves the first [n] elements of the list *)
+(**
+  [take l n] takes at least [n] elements and at most [List.length l]
+*)
 let test_take_length take =
   QCheck.Test.make ~name:"test_take_length"
   (tup2 small_nat (list small_int)) (fun (n, l) ->
@@ -63,7 +58,9 @@ let test_take_length take =
 
   )
 
-(* Take preserves the first [n] elements of the list *)
+(**
+  [drop l n] drops at most [n] elements
+*)
 let test_drop_length drop =
   QCheck.Test.make ~name:"test_drop_length"
   (tup2 small_nat (list small_int)) (fun (n, l) ->
@@ -72,50 +69,39 @@ let test_drop_length drop =
 
   )
 
-let test_take_preserves_one take =
-  QCheck.Test.make ~name:"test_take_preserves_one"
-  (tup3 small_nat small_nat (list small_int)) (fun (i, n, l) ->
-
-    assume (0 <= i && i < min (List.length l) n); (* do NOT use ==> *)
-    List.mem (List.nth l i) (take l n)
-
-  )
-
-let test_take_preserves_all take =
-  QCheck.Test.make ~name:"test_take_preserves_all"
+(**
+  [take l n] is sublist of [l]
+*)
+let test_take_sublist take =
+  QCheck.Test.make ~name:"test_take_sublist"
   (tup2 small_nat (list small_int)) (fun (n, l) ->
 
-    assume (l <> []);
+    let t = take l n in
     List.for_all
-      (fun i -> List.mem (List.nth l i) (take l n))
-      (0 -- min (List.length l) n)
+      (fun i -> List.mem (List.nth t i) l)
+      (0 -- List.length t)
+
+  )
+
+(**
+  [drop l n] is sublist of [l]
+*)
+let test_drop_sublist drop =
+  QCheck.Test.make ~name:"test_drop_sublist"
+  (tup2 small_nat (list small_int)) (fun (n, l) ->
+
+    let t = drop l n in
+    List.for_all
+      (fun i -> List.mem (List.nth t i) l)
+      (0 -- List.length t)
 
   )
 
 ;;
 
-QCheck_runner.run_tests ~verbose:true
-  [
-    test_take_length take;
-    test_drop_length drop;
-    test_take_preserves_one take;
-    test_take_preserves_all take;
-  ];;
-
-(** Correct implementation *)
-
-let rec take l n =
-  match l with
-  | [] -> []
-  | _ when n = 0 -> []
-  | x :: xs -> x :: take xs (n-1)
-
-let rec drop l n =
-  match l with
-  | [] -> []
-  | _ when n = 0 -> l
-  | _ :: xs -> drop xs (n-1)
-;;
+(* ################################################
+   Test runner
+   ################################################ *)
 
 QCheck_runner.run_tests ~verbose:true
   [
@@ -124,6 +110,6 @@ QCheck_runner.run_tests ~verbose:true
     test_take_take take;
     test_take_length take;
     test_drop_length drop;
-    test_take_preserves_one take;
-    test_take_preserves_all take;
+    test_take_sublist take;
+    test_drop_sublist drop;
   ];;
