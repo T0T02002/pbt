@@ -20,7 +20,14 @@ class Set(RuleBasedStateMachine):
 		for item in rm_elems:
 			if item in self.elems:
 				self.elems.remove(item)
+
+	def mem(self, x):
+		return (x in self.elems)
 				
+	def to_string(self):
+		formatted_set = "{ " + ", ".join(map(str, self.elems)) + " }"
+		return formatted_set
+
 	@invariant()
 	def nodup(self):
 		occurrences = {}
@@ -32,9 +39,6 @@ class Set(RuleBasedStateMachine):
 			occurrences[item] = 1
     
 		assert(has_dup == False)			
-
-	def mem(self, x):
-		return (x in self.elems)
 
 	@rule(add_elems=lists(integers(min_value=0,max_value=10), max_size=2))
 	def union_mem(self, add_elems):	

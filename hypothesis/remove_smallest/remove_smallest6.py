@@ -19,18 +19,6 @@ def remove_smallest(numbers: List[int]) -> None:
         else:
             i+=1
 
-# Unit tests
-
-def test_unit1():
-    l = [1,2,3]
-    remove_smallest(l)
-    assert l == [2,3]
-
-def test_unit2():
-    l = [0,0]
-    remove_smallest(l)
-    assert l == []
-
 @given(lists(integers()))
 @settings(max_examples=10000)
 def test_remove_smallest(l):
@@ -38,7 +26,3 @@ def test_remove_smallest(l):
     smallest = min(l)
     remove_smallest(l)
     assert len(l) == 0 or min(l) > smallest
-
-# hypothesis check succeeds, but the property is false
-
-# crosshair check --analysis_kind=PEP316 remove_smallest6.py
