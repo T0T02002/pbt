@@ -81,6 +81,13 @@ def test_remove_smallest(l):
     assert len(l) == 0 or min(l) > smallest  # either the list is empty, or
                                              # the new least element is greater than the old one 
 ```
+The test is structured as follows:
+- the [`@given`](https://hypothesis.readthedocs.io/en/latest/details.html#hypothesis.given) decorator specifies [strategies](https://hypothesis.readthedocs.io/en/latest/data.html) that describe the range of valid inputs for the test.
+In our `test_remove_smallest`, the strategy considers as input every possible list of integers. The test is expected to pass for *any* possible argument allowed by its strategies;
+- the [`assume`](https://hypothesis.readthedocs.io/en/latest/details.html#hypothesis.assume) command makes the test skips (without failing) whenever the inputs do not satisfy the given condition. In our case, we skip the test whenever the input list is empty;
+- the `remove_smallest` command executes the function we are going to test; 
+- the `assert` command makes the test fail whenever the output list is non-empty and its new least element is *not* greater than the old one.
+
 By running `pytest`, we now obtain an error:
 ```bash
 pytest  remove_smallest1.py 
