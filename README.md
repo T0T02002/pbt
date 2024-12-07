@@ -9,7 +9,7 @@ We show in this repository some examples of property-based testing in Hypothesis
 ## Examples in Python/Hypothesis
 
 - [Remove least element from a list](hypothesis/remove_smallest/)
-- [Set class](hypothesis/set.py)
+- [Set class](hypothesis/set/)
 
 ## Examples in OCaml/qcheck
 

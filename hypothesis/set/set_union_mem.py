@@ -1,6 +1,8 @@
-from hypothesis import note, assume, settings
+from hypothesis import settings
 from hypothesis.strategies import *
 from hypothesis.stateful import rule, invariant, precondition, RuleBasedStateMachine
+
+import pytest
 
 class Set(RuleBasedStateMachine):
 	def __init__(self):
@@ -13,13 +15,13 @@ class Set(RuleBasedStateMachine):
 			if not item in self.elems:
 				self.elems.append(item)
 			else:
-				break # bug here!
+				break # bug!
 
 	@rule(rm_elems=lists(integers(min_value=0,max_value=10), unique=True))		
 	def diff(self, rm_elems):
 		for item in rm_elems:
 			if item in self.elems:
-				self.elems.remove(item)
+				self.elems.remove(item) # bug, but not dangerous here
 
 	def mem(self, x):
 		return (x in self.elems)
@@ -28,26 +30,14 @@ class Set(RuleBasedStateMachine):
 		formatted_set = "{ " + ", ".join(map(str, self.elems)) + " }"
 		return formatted_set
 
-	@invariant()
-	def nodup(self):
-		occurrences = {}
-		has_dup = False
-		for item in self.elems:
-			if item in occurrences:
-				has_dup = True  # Duplicate found
-				break
-			occurrences[item] = 1
-    
-		assert(has_dup == False)			
-
 	@rule(add_elems=lists(integers(min_value=0,max_value=10), max_size=2))
-	def union_mem(self, add_elems):	
+	def test_union_mem(self, add_elems):	
 		self.union(add_elems)
 		for x in add_elems:
 			assert(Set.mem(self,x))
-		
+			
 TestSet = Set.TestCase
 
-Set.TestCase.settings = settings(
+TestSet.settings = settings(
     max_examples=500, stateful_step_count=20
 )
