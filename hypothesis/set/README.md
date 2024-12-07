@@ -1,13 +1,18 @@
-# A set class
+# Stateful testing of a set class
 
-We consider here a simple class implementing a set datatype.
-The `Set` class stores a set as a list of its elements, and it 
-implementats the following operations:
+We consider here a simple class implementing a set datatype. 
+Our `Set` class stores a set as a list of its elements, and it implementats the following methods:
 - `union(add_elems)`: adds a list of elements to the set.
 - `diff(rm_elems)`: removes a list of elements from the set.
 - `mem(x)`: checks if an element is a member of the set.
 - `to_string()`: returns a formatted string representation of the set.
-Here is our implementation:
+
+Our tests will specify **invariants** of the class, i.e. conditions that are expected to hold in every reachable state, 
+and **rules** that specify conditions that must hold after specific sequences of operations.
+Hypothesis will try to find sequences of method calls that result in a violation of an invariant or of a rule,
+a technique called [stateful testing](https://hypothesis.readthedocs.io/en/latest/stateful.html).
+
+Here is our class implementation:
 ```python
 class Set(RuleBasedStateMachine):
 	def __init__(self):
