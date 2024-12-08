@@ -27,8 +27,7 @@ class Set(RuleBasedStateMachine):
 		return (x in self.elems)
 				
 	def to_string(self):
-		formatted_set = "{ " + ", ".join(map(str, self.elems)) + " }"
-		return formatted_set
+		return "{ " + ", ".join(map(str, self.elems)) + " }"
 
 	@rule(add_elems=lists(integers(min_value=0,max_value=10), max_size=2))
 	def test_union_mem(self, add_elems):	

@@ -27,8 +27,7 @@ class Set(RuleBasedStateMachine):
 		return (x in self.elems)
 				
 	def to_string(self):
-		formatted_set = "{ " + ", ".join(map(str, self.elems)) + " }"
-		return formatted_set
+		return "{ " + ", ".join(map(str, self.elems)) + " }"
 
 	@invariant()
 	def test_nodup(self):

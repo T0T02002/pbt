@@ -27,8 +27,7 @@ class Set(RuleBasedStateMachine):
 		return (x in self.elems)
 				
 	def to_string(self):
-		formatted_set = "{ " + ", ".join(map(str, self.elems)) + " }"
-		return formatted_set
+		return "{ " + ", ".join(map(str, self.elems)) + " }"
 
 	@rule(rm_elems=lists(integers(min_value=0,max_value=10), max_size=2))
 	def test_diff_mem(self, rm_elems):	
