@@ -48,7 +48,7 @@ This implementation hides two bugs:
 
 ## Invariant: no duplicates
 
-The [`test_nodup`](set_nodop.py) invariant ensures that the `Set` implementation never contains duplicate elements:
+The [`test_nodup`](set_nodup.py) invariant ensures that the `Set` implementation never contains duplicate elements:
 ```python
 @invariant()
 def test_nodup(self):
