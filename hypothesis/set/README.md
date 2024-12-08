@@ -46,7 +46,7 @@ This implementation hides two bugs:
 - `union` bug: if a duplicate is encountered while adding elements, the loop breaks prematurely. This prevents the other elements of the list to be added to the set. 
 - `diff` bug: as observed in the [remove_smallest](../remove_smallest) example, removing list elements within an iterator is problematic. However, in this specific class this is not an issue, since the list that stores the set elements does not contain duplicates.
 
-## Invariant: No Duplicates
+## Invariant: no duplicates
 
 The [`test_nodup`](set_nodop.py) invariant ensures that the `Set` implementation never contains duplicate elements:
 ```python
@@ -74,10 +74,12 @@ set_nodup.py .                                                             [100%
 =============================== 1 passed in 8.06s ================================
 ```
 
-## Rule: Union adds elements
+## Rule: union adds elements
 
 The [`test_union_mem`](set_union_mem.py) rule tests the `union` method.
 Specifically, it checks that after union, all elements in the list `add_elems` are members of the set.
+To reduce the search space of the rule, we constrain the input list `add_elems` to have maximum size 2,
+and its elements to be included in the range [0,10]:
 ```python
 @rule(add_elems=lists(integers(min_value=0, max_value=10), max_size=2))
 def test_union_mem(self, add_elems):	
@@ -85,7 +87,7 @@ def test_union_mem(self, add_elems):
     for x in add_elems:
         assert Set.mem(self, x)
 ```
-
+Hypothesis manages to spot the bug:
 ```python
 pytest set_union_mem.py 
 ============================== test session starts ===============================
@@ -133,12 +135,12 @@ set_union_mem.py:36: AssertionError
 FAILED set_union_mem.py::TestSet::runTest - assert False
 =============================== 1 failed in 4.48s ================================
 ```
-The output shows that the test fails, and a counterexample, given by the sequence of method calls:
+The output shows a counterexample where the `assert` within the rule fails, given by the following sequence of method calls:
 ```python
 state.test_union_mem(add_elems=[0])
 state.test_union_mem(add_elems=[0, 1])
 ```
-We can turn this into a concrete counterexample.
+We can turn this into a concrete executable counterexample:
 ```python
 ipython -i set.py 
 
@@ -155,7 +157,7 @@ In [6]: s.to_string()
 Out[6]: '{ 0 }'
 ```
 
-## Rule: Diff remove elements
+## Rule: diff removes elements
 
 The [`test_diff_mem`](set_diff_mem.py) rule tests the `diff` method.
 Specifically, it checks that after difference, all elements in the list `rm_elems` are *not* members of the set.
