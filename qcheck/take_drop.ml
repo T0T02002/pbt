@@ -4,9 +4,21 @@ open QCheck
    Definitions
    ################################################ *)
 
-let take _ _ = []
+let rec take l n =
+  if n > 0 then
+    match l with
+    | [] -> []
+    | x :: xs -> x :: take xs (n-1)
+  else
+    []
 
-let drop l _ = l
+let rec drop l n =
+  if n > 0 then
+    match l with
+    | [] -> []
+    | _ :: xs -> drop xs (n-1)
+  else
+    l
 
 (* ################################################
    Start of tests
@@ -70,7 +82,7 @@ let test_drop_length drop =
   )
 
 (**
-  [take l n] is sublist of [l]
+  [take l n] is a sublist of [l]
 *)
 let test_take_sublist take =
   QCheck.Test.make ~name:"test_take_sublist"
@@ -84,7 +96,7 @@ let test_take_sublist take =
   )
 
 (**
-  [drop l n] is sublist of [l]
+  [drop l n] is a sublist of [l]
 *)
 let test_drop_sublist drop =
   QCheck.Test.make ~name:"test_drop_sublist"
@@ -108,8 +120,10 @@ QCheck_runner.run_tests ~verbose:true
     test_take_drop_append take drop;
     test_take_drop_nil take drop;
     test_take_take take;
+
     test_take_length take;
     test_drop_length drop;
+
     test_take_sublist take;
     test_drop_sublist drop;
   ];;

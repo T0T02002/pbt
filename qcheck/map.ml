@@ -1,46 +1,59 @@
+(**
+  Lists are Functors:
+  
+  https://wiki.haskell.org/index.php?title=Functor
+  https://lean-lang.org/lean4/doc/monads/laws.lean.html#what-are-the-functor-laws
+*)
+
 open QCheck
+
+(* ################################################
+   Definitions
+   ################################################ *)
 
 let rec map (f : 'a -> 'b) (l : 'a list) : 'b list =
   match l with
   | [] -> []
   | x :: xs -> f x :: map f xs
 
-let rec map_bad (f : 'a -> 'b) (l : 'a list) : 'b list =
-  match l with
-  | [] -> []
-  | x :: xs -> f (f x) :: map_bad f xs
+(* ################################################
+   Start of tests
+   ################################################ *)
 
-(*
-  1. map id x = x
-  2. map (h . g) x = map h (map g x)
+(**
+  Mapping the identity function over a list preserves the list: [map id l = l]
 *)
-
-let test_identity_law map_impl =
+let test_identity_law map =
   Test.make ~name:"test_identity_law"
   (list small_int) (fun l ->
 
-    map_impl Fun.id l = l
+    map (fun x -> x) l = l
 
   )
 
-let test_composition_law map_impl =
+(**
+  [map] preserves the composition of functions:
+  [map (h . g) x = map h (map g x)]
+*)
+let test_composition_law map =
   Test.make ~name:"test_composition_law"
   (tup3 (fun1 Observable.int small_int) (fun1 Observable.int small_int) (list small_int)
   )
   (fun (h,g,l) ->
     let h,g = Fn.apply h, Fn.apply g in
 
-    map_impl (Fun.compose h g) l = map_impl h (map_impl g l)
+    map (Fun.compose h g) l = map h (map g l)
 
   )
 
 ;;
 
+(* ################################################
+   Test runner
+   ################################################ *)
+
 QCheck_runner.run_tests ~verbose:true
   [
     test_identity_law map;
     test_composition_law map;
-
-    test_identity_law map_bad;
-    test_composition_law map_bad;
   ]

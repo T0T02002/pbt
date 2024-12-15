@@ -4,7 +4,7 @@
 
 * `drop l n` discards the first `n` elements of `l` and returns the remainder of the list.
 
-Each of the two functions the opposite job of the other function, so a first property we could test is:
+Each function does the opposite job of the other, so a first property we could test is:
 ```ocaml
 take l n @ drop l n = l
 ```
@@ -15,7 +15,7 @@ If we first take `n` elements from the list and then drop `n` elements from the 
 drop (take l n) n = []
 ```
 
-Another fact about `take` is that it's idempotent: once we take n elements from the list, if we keep taking `n` elements we will get the same list:
+Another interesting fact about `take` is that it's idempotent: once we take n elements from the list, if we keep taking `n` elements we will get the same list:
 ```ocaml
 take (take l n) n = take l n
 ```

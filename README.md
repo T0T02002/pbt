@@ -14,7 +14,7 @@ We show in this repository some examples of property-based testing in Hypothesis
 ## Examples in OCaml/qcheck
 
 - [Take / drop elements from a list](qcheck/take_drop.ml)
-- [Mapping on a list](qcheck/map.ml)
+- [Lists are functors](qcheck/map.ml)
 - [All elements of a list satisfy a predicate](qcheck/forall.ml)
 - [Insertion sort](qcheck/insertion_sort.ml)
 - [Merge sort](qcheck/merge_sort.ml)
@@ -25,6 +25,8 @@ We show in this repository some examples of property-based testing in Hypothesis
 - George Fink, Matt Bishop: [Property-based testing: a new approach to testing for assurance](https://dl.acm.org/doi/abs/10.1145/263244.263267), 1997
 - D. R. MacIver: [In praise of property-based testing](https://increment.com/testing/in-praise-of-property-based-testing/), 2019
 - J. Hughes: [How to Specify It!: A Guide to Writing Properties of Pure Functions](https://research.chalmers.se/publication/517894/file/517894_Fulltext.pdf), 2020 ([video](https://youtu.be/G0NUOst-53U?si=AY6THBq_DYjDRYu1))
+- [Choosing properties for property-based testing](https://fsharpforfunandprofit.com/posts/property-based-testing-2/)
+
 
 ### Hypothesis
 - [Python Hypothesis library](https://hypothesis.readthedocs.io/en/latest/)
